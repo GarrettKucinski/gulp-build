@@ -41,6 +41,9 @@ gulp.task('images', () => {
             imagemin.optipng({ optimizationLevel: 5 })
         ]))
         .pipe(gulp.dest('./dist/content'));
+
+    gulp.src(`${paths.src}/icons/**/*`)
+        .pipe(gulp.dest(`${paths.dist}/icons`));
 });
 
 gulp.task('clean', () => {
