@@ -1,22 +1,31 @@
 {
-  "name": "gulp-build-v1",
-  "version": "1.0.0",
-  "description": "A project to write a Gulp build pipeline",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "browser-sync": "^2.18.12",
-    "gulp-clean": "^0.3.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-imagemin": "^3.3.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.0",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.8"
-  }
+    "name": "gulp-build-v1",
+    "version": "1.0.0",
+    "description": "A javascript project to illustrate the ability to write a custom gulpfile for use in a professional build pipline.",
+    "main": "index.html",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/GarrettKucinski/gulp-build.git"
+    },
+    "author": "Garrett Kucinski",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/GarrettKucinski/gulp-build/issues"
+    },
+    "homepage": "https://github.com/GarrettKucinski/gulp-build#readme",
+    "devDependencies": {
+        "browser-sync": "^2.18.12",
+        "gulp": "^3.9.1",
+        "gulp-clean": "^0.3.2",
+        "gulp-concat": "^2.6.1",
+        "gulp-imagemin": "^3.3.0",
+        "gulp-rename": "^1.2.2",
+        "gulp-sass": "^3.1.0",
+        "gulp-sourcemaps": "^2.6.0",
+        "gulp-uglify": "^3.0.0",
+        "gulp-util": "^3.0.8"
+    }
 }
