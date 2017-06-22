@@ -4,8 +4,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const util = require('gulp-util');
-// const del = require('del');
-const clean = require('gulp-clean');
+const del = require('del');
 const runsequence = require('run-sequence');
 const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
@@ -54,9 +53,7 @@ gulp.task('icons', ['clean'], () => {
 });
 
 gulp.task('clean', () => {
-    // return del(`${paths.dist}`);
-    return gulp.src(`${paths.dist}`)
-        .pipe(clean({ force: true }));
+    return del(`${paths.dist}`)
 });
 
 gulp.task('build', ['clean'], () => {
