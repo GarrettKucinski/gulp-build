@@ -60,28 +60,23 @@ gulp.task('icons', () => {
         .pipe(gulp.dest(`${paths.dist}/icons`));
 });
 
-gulp.task('serve', () => {
-    browserSync.init({
+gulp.task('watch', () => {
+    gulp.watch(`${paths.src}/sass/*`, ['styles']);
+    gulp.watch(`${paths.src}/js/**/*`, ['scripts']);
+});
+
+gulp.task('serve', ['build'], () => {
+    return browserSync.init({
         server: {
             baseDir: './'
         }
     });
 });
 
-gulp.task('watch', () => {
-    gulp.watch(`${paths.src}/sass/*`, ['styles']);
-    gulp.watch(`${paths.src}/js/**/*`, ['scripts']);
+gulp.task('build', ['clean', 'styles', 'scripts', 'images', 'icons'], () => {
+    util.log('Build Finished');
 });
 
-gulp.task('build', () => {
-    runsequence('clean', [
-        'styles',
-        'images',
-        'scripts',
-        'icons',
-    ], 'serve');
-});
-
-gulp.task('default', ['build', 'watch'], () => {
+gulp.task('default', ['build', 'watch', 'serve'], () => {
     util.log('Gulped all the things!');
 });
