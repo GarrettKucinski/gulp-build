@@ -3,6 +3,7 @@ const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
+const runsequence = require('run-sequence');
 const util = require('gulp-util');
 const del = require('del');
 const rename = require('gulp-rename');
@@ -18,7 +19,7 @@ gulp.task('clean', () => {
     return del.sync(paths.dist);
 });
 
-gulp.task('styles', ['clean'], () => {
+gulp.task('styles', () => {
     return gulp.src(`${paths.src}/sass/global.scss`)
         .pipe(sourcemaps.init())
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
@@ -28,7 +29,7 @@ gulp.task('styles', ['clean'], () => {
         .pipe(browserSync.stream({ match: '**/*.css' }));
 });
 
-gulp.task('scripts', ['clean'], () => {
+gulp.task('scripts', () => {
     return gulp.src(`${paths.src}/js/**/*`)
         .pipe(sourcemaps.init())
         .pipe(concat('all.min.js'))
@@ -38,7 +39,7 @@ gulp.task('scripts', ['clean'], () => {
         .pipe(browserSync.stream({ match: '**/*.js' }));
 });
 
-gulp.task('images', ['clean'], () => {
+gulp.task('images', () => {
     return gulp.src(`${paths.src}/images/*`)
         .pipe(imagemin([
             imagemin.jpegtran({ progressive: true }),
@@ -47,7 +48,7 @@ gulp.task('images', ['clean'], () => {
         .pipe(gulp.dest('./dist/content'));
 });
 
-gulp.task('icons', ['clean'], () => {
+gulp.task('icons', () => {
     return gulp.src(`${paths.src}/icons/**/*`)
         .pipe(imagemin([
             imagemin.svgo({ plugins: [{ removeViewBox: true }] })
@@ -68,7 +69,14 @@ gulp.task('watch', () => {
     gulp.watch(`${paths.src}/js/**/*`, ['scripts']);
 });
 
-gulp.task('build', ['styles', 'images', 'scripts', 'icons', 'serve']);
+gulp.task('build', () => {
+    runsequence('clean', [
+        'styles',
+        'images',
+        'scripts',
+        'icons',
+    ], 'serve');
+});
 
 gulp.task('default', ['build', 'watch'], () => {
     util.log('Gulped all the things!');
