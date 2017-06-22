@@ -5,7 +5,6 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const util = require('gulp-util');
 const del = require('del');
-const runsequence = require('run-sequence');
 const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
 const browserSync = require('browser-sync').create();
@@ -19,8 +18,8 @@ gulp.task('clean', () => {
     return del.sync(paths.dist);
 });
 
-gulp.task('styles', () => {
-    gulp.src(`${paths.src}/sass/global.scss`)
+gulp.task('styles', ['clean'], () => {
+    return gulp.src(`${paths.src}/sass/global.scss`)
         .pipe(sourcemaps.init())
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
         .pipe(rename('all.min.css'))
@@ -29,8 +28,8 @@ gulp.task('styles', () => {
         .pipe(browserSync.stream({ match: '**/*.css' }));
 });
 
-gulp.task('scripts', () => {
-    gulp.src(`${paths.src}/js/**/*`)
+gulp.task('scripts', ['clean'], () => {
+    return gulp.src(`${paths.src}/js/**/*`)
         .pipe(sourcemaps.init())
         .pipe(concat('all.min.js'))
         .pipe(uglify())
@@ -39,8 +38,8 @@ gulp.task('scripts', () => {
         .pipe(browserSync.stream({ match: '**/*.js' }));
 });
 
-gulp.task('images', () => {
-    gulp.src(`${paths.src}/images/*`)
+gulp.task('images', ['clean'], () => {
+    return gulp.src(`${paths.src}/images/*`)
         .pipe(imagemin([
             imagemin.jpegtran({ progressive: true }),
             imagemin.optipng({ optimizationLevel: 5 })
@@ -48,21 +47,12 @@ gulp.task('images', () => {
         .pipe(gulp.dest('./dist/content'));
 });
 
-gulp.task('icons', () => {
-    gulp.src(`${paths.src}/icons/**/*`)
+gulp.task('icons', ['clean'], () => {
+    return gulp.src(`${paths.src}/icons/**/*`)
         .pipe(imagemin([
             imagemin.svgo({ plugins: [{ removeViewBox: true }] })
         ]))
         .pipe(gulp.dest(`${paths.dist}/icons`));
-});
-
-gulp.task('build', () => {
-    runsequence('clean', [
-        'scripts',
-        'styles',
-        'icons',
-        'images'
-    ], 'serve');
 });
 
 gulp.task('serve', () => {
@@ -77,6 +67,8 @@ gulp.task('watch', () => {
     gulp.watch(`${paths.src}/sass/*`, ['styles']);
     gulp.watch(`${paths.src}/js/**/*`, ['scripts']);
 });
+
+gulp.task('build', ['styles', 'images', 'scripts', 'icons', 'serve']);
 
 gulp.task('default', ['build', 'watch'], () => {
     util.log('Gulped all the things!');
