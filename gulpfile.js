@@ -8,6 +8,7 @@ const util = require('gulp-util');
 const del = require('del');
 const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
+const cleanCSS = require('gulp-clean-css');
 const browserSync = require('browser-sync').create();
 
 const paths = {
@@ -23,6 +24,7 @@ gulp.task('styles', () => {
     return gulp.src(`${paths.src}/sass/global.scss`)
         .pipe(sourcemaps.init())
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+        .pipe(cleanCSS())
         .pipe(rename('all.min.css'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(`${paths.dist}/styles`))
