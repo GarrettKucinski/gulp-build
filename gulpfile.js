@@ -5,7 +5,6 @@ const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
-const runsequence = require('run-sequence');
 const util = require('gulp-util');
 const del = require('del');
 const rename = require('gulp-rename');
