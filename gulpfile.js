@@ -4,7 +4,9 @@ const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const util = require('gulp-util');
+// const del = require('del');
 const clean = require('gulp-clean');
+const runsequence = require('run-sequence');
 const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
 const browserSync = require('browser-sync').create();
@@ -40,18 +42,39 @@ gulp.task('images', () => {
             imagemin.jpegtran({ progressive: true }),
             imagemin.optipng({ optimizationLevel: 5 })
         ]))
-        .pipe(gulp.dest('./dist/content'));
+        .pipe(gulp.dest('./dist/content'))
+        .pipe(browserSync.stream());
 
+});
+
+gulp.task('icons', ['clean'], () => {
     gulp.src(`${paths.src}/icons/**/*`)
-        .pipe(gulp.dest(`${paths.dist}/icons`));
+        .pipe(gulp.dest(`${paths.dist}/icons`))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('clean', () => {
-    return gulp.src(`${paths.dist}`, { read: false })
-        .pipe(clean());
+    // return del(`${paths.dist}`);
+    return gulp.src(`${paths.dist}`)
+        .pipe(clean({ force: true }));
 });
 
-gulp.task('build', ['clean', 'styles', 'scripts', 'images']);
+gulp.task('build', ['clean'], () => {
+    runsequence([
+        'scripts',
+        'styles',
+        'icons',
+        'images'
+    ], 'serve');
+});
+
+gulp.task('serve', () => {
+    browserSync.init({
+        server: {
+            baseDir: './'
+        }
+    });
+});
 
 gulp.task('watch', () => {
     gulp.watch(`${paths.src}/sass/*`, ['styles']);
@@ -59,10 +82,5 @@ gulp.task('watch', () => {
 });
 
 gulp.task('default', ['build', 'watch'], () => {
-    browserSync.init({
-        server: {
-            baseDir: './'
-        }
-    });
     util.log('Gulped all the things!');
 });
