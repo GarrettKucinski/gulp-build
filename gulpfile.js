@@ -64,16 +64,16 @@ gulp.task('watch', () => {
     gulp.watch(`${paths.src}/js/**/*`, ['scripts']);
 });
 
+gulp.task('build', ['clean', 'styles', 'scripts', 'images', 'icons'], () => {
+    util.log('Build Finished');
+});
+
 gulp.task('serve', ['build'], () => {
     return browserSync.init({
         server: {
             baseDir: './'
         }
     });
-});
-
-gulp.task('build', ['clean', 'styles', 'scripts', 'images', 'icons'], () => {
-    util.log('Build Finished');
 });
 
 gulp.task('default', ['build', 'watch', 'serve'], () => {
