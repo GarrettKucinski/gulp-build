@@ -15,6 +15,10 @@ const paths = {
     dist: 'dist'
 };
 
+gulp.task('clean', () => {
+    return del.sync(paths.dist);
+});
+
 gulp.task('styles', () => {
     gulp.src(`${paths.src}/sass/global.scss`)
         .pipe(sourcemaps.init())
@@ -41,23 +45,19 @@ gulp.task('images', () => {
             imagemin.jpegtran({ progressive: true }),
             imagemin.optipng({ optimizationLevel: 5 })
         ]))
-        .pipe(gulp.dest('./dist/content'))
-        .pipe(browserSync.stream());
-
+        .pipe(gulp.dest('./dist/content'));
 });
 
-gulp.task('icons', ['clean'], () => {
+gulp.task('icons', () => {
     gulp.src(`${paths.src}/icons/**/*`)
-        .pipe(gulp.dest(`${paths.dist}/icons`))
-        .pipe(browserSync.stream());
+        .pipe(imagemin([
+            imagemin.svgo({ plugins: [{ removeViewBox: true }] })
+        ]))
+        .pipe(gulp.dest(`${paths.dist}/icons`));
 });
 
-gulp.task('clean', () => {
-    return del(`${paths.dist}`)
-});
-
-gulp.task('build', ['clean'], () => {
-    runsequence([
+gulp.task('build', () => {
+    runsequence('clean', [
         'scripts',
         'styles',
         'icons',
