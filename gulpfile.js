@@ -1,6 +1,7 @@
 'use strict';
 
 const gulp = require('gulp');
+const plumber = require('gulp-plumber');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
@@ -23,6 +24,7 @@ gulp.task('clean', () => {
 
 gulp.task('styles', () => {
     return gulp.src(`${paths.src}/sass/global.scss`)
+        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
         .pipe(cleanCSS())
@@ -34,6 +36,7 @@ gulp.task('styles', () => {
 
 gulp.task('scripts', () => {
     return gulp.src(`${paths.src}/js/**/*`)
+        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(concat('all.min.js'))
         .pipe(uglify())
