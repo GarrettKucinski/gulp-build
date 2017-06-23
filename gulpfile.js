@@ -5,7 +5,7 @@ const plumber = require('gulp-plumber');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
+const babel = require('gulp-babel');
 const util = require('gulp-util');
 const del = require('del');
 const rename = require('gulp-rename');
@@ -39,7 +39,8 @@ gulp.task('scripts', () => {
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(concat('all.min.js'))
-        .pipe(uglify())
+        // .pipe(uglify())
+        .pipe(babel({ presets: 'babili' }))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(`${paths.dist}/js`))
         .pipe(browserSync.stream({ match: '**/*.js' }));
