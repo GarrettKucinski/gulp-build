@@ -39,7 +39,6 @@ gulp.task('scripts', () => {
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(concat('all.min.js'))
-        // .pipe(uglify())
         .pipe(babel({ presets: 'babili' }))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(`${paths.dist}/js`))
